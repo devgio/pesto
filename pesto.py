@@ -1,8 +1,12 @@
-# import sys, io
-# std_out = io.StringIO()
-# sys.stdout = std_out
-# sys.stderr = std_out
+# Supress the stdout
+import sys, io
+std_out = io.StringIO()
+sys.stdout = std_out
+sys.stderr = std_out
 
+import pkg_resources.py2_warn
+import atexit
+import os
 from kivy.config import Config
 Config.set('graphics', 'resizable', False)
 from kivy.app import App
@@ -12,9 +16,6 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.switch import Switch
 from kivy.core.window import Window
 from pynput.keyboard import Controller, Listener, Key
-import pkg_resources.py2_warn
-import atexit
-import os
 dir_path = os.path.dirname(os.path.realpath(__file__))
 
 
@@ -57,7 +58,7 @@ key_combos = [
 
 # Load texts from last time
 text_save_separator = '¶¶'
-text_save_file = 'texts.temp'
+text_save_file = 'cache.temp'
 text_save_file = os.path.join(dir_path, text_save_file)
 if os.path.isfile(text_save_file):
     try:
@@ -65,7 +66,12 @@ if os.path.isfile(text_save_file):
             texts = f.read().split(text_save_separator)[1:]
             if len(texts) == len(key_combos):
                 for kc in key_combos:
-                    kc.text_input.text = texts[key_combos.index(kc)]
+                    state = texts[key_combos.index(kc)]
+                    if state[0] == '1':
+                        kc.intro.active = True
+                    if state[1] == '0':
+                        kc.switch.active = False
+                    kc.text_input.text = state[2:]
     except:
         os.remove(text_save_file)
 
@@ -120,7 +126,12 @@ listener.start()
 def save_texts():
     with open(text_save_file, 'w') as f:
         for kc in key_combos:
-            f.write(f'{text_save_separator}{kc.text()}')
+            intro, switch = 0, 0
+            if kc.switch.active:
+                switch = 1
+            if kc.intro.active:
+                intro = 1
+            f.write(f'{text_save_separator}{intro}{switch}{kc.text()}')
 atexit.register(save_texts)
 
 
