@@ -1,3 +1,5 @@
+__version__ = '1.0'
+
 # Supress the stdout
 import sys, io
 std_out = io.StringIO()
@@ -92,7 +94,7 @@ class MainPage(GridLayout):
         self.add_widget(Label())
         self.add_widget(Label())
         self.add_widget(Label())
-        self.add_widget(Label(text=f'[i][size={small_text_size}]Version: B1.0[/size][/i]', markup=True))
+        self.add_widget(Label(text=f'[size={small_text_size}]Version: {__version__}[/size]', markup=True))
 
 class PestoApp(App):
     def open_settings(self, *largs):
