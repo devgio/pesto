@@ -6,7 +6,7 @@ std_out = io.StringIO()
 sys.stdout = std_out
 sys.stderr = std_out
 
-import pkg_resources.py2_warn
+import pkg_resources.py2_warn # this is for pyinstaller
 import atexit
 import os
 from kivy.config import Config
@@ -31,6 +31,7 @@ active_column_width = int(window_width*0.12)
 text_column_width = int(window_width*0.64)
 
 
+# Key combinations to trigger the typing
 class KeyCombo:
     def __init__(self, name, trigger):
         self.name = name
@@ -38,7 +39,7 @@ class KeyCombo:
         self.switch = Switch(active=True, size_hint_x=None, width=active_column_width)
         self.text_input = TextInput(size_hint_x=None, width=text_column_width)
         self.intro = Switch(size_hint_x=None, width=intro_column_width)
-    
+
     def text(self):
         return self.text_input.text
 
@@ -65,19 +66,17 @@ text_save_file = os.path.join(dir_path, text_save_file)
 if os.path.isfile(text_save_file):
     try:
         with open(text_save_file, 'r') as f:
-            texts = f.read().split(text_save_separator)[1:]
-            if len(texts) == len(key_combos):
-                for kc in key_combos:
-                    state = texts[key_combos.index(kc)]
-                    if state[0] == '1':
-                        kc.intro.active = True
-                    if state[1] == '0':
-                        kc.switch.active = False
-                    kc.text_input.text = state[2:]
+            texts = f.read().split(text_save_separator)
+            for kc in key_combos:
+                state = texts[key_combos.index(kc)]
+                if state[0] == '1': kc.intro.active = True
+                if state[1] == '0': kc.switch.active = False
+                kc.text_input.text = state[2:]
     except:
         os.remove(text_save_file)
 
 
+# Create GUI
 class MainPage(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -91,14 +90,12 @@ class MainPage(GridLayout):
             self.add_widget(kc.text_input)
             self.add_widget(kc.intro)
             self.add_widget(kc.switch)
-        self.add_widget(Label())
-        self.add_widget(Label())
-        self.add_widget(Label())
         self.add_widget(Label(text=f'[size={small_text_size}]Version: {__version__}[/size]', markup=True))
 
 class PestoApp(App):
     def open_settings(self, *largs):
         pass
+
     def build(self):
         self.icon = 'duck.ico'
         return MainPage()
@@ -129,11 +126,9 @@ def save_texts():
     with open(text_save_file, 'w') as f:
         for kc in key_combos:
             intro, switch = 0, 0
-            if kc.switch.active:
-                switch = 1
-            if kc.intro.active:
-                intro = 1
-            f.write(f'{text_save_separator}{intro}{switch}{kc.text()}')
+            if kc.switch.active: switch = 1
+            if kc.intro.active: intro = 1
+            f.write(f'{intro}{switch}{kc.text()}{text_save_separator}')
 atexit.register(save_texts)
 
 
