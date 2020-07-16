@@ -18,8 +18,9 @@ from kivy.uix.textinput import TextInput
 from kivy.uix.switch import Switch
 from kivy.core.window import Window
 from pynput.keyboard import Controller, Listener, Key
-dir_path = os.path.dirname(os.path.realpath(__file__))
 
+dir_path = os.path.dirname(os.path.realpath(__file__))
+home_dir = os.path.expanduser("~")
 
 # Sizes for GUI
 window_width, window_height = Window.size
@@ -62,7 +63,7 @@ key_combos = [
 # Load texts from last time
 text_save_separator = '¶¶'
 text_save_file = 'cache.temp'
-text_save_file = os.path.join(dir_path, text_save_file)
+text_save_file = os.path.join(home_dir, text_save_file)
 if os.path.isfile(text_save_file):
     try:
         with open(text_save_file, 'r') as f:
@@ -97,7 +98,7 @@ class PestoApp(App):
         pass
 
     def build(self):
-        self.icon = 'duck.ico'
+        self.icon = os.path.join(dir_path, 'duck.ico')
         return MainPage()
 
 
