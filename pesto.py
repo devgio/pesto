@@ -80,9 +80,9 @@ if os.path.isfile(text_save_file):
         os.remove(text_save_file)
 
 
+# Create GUI
 def show_about(self):
-    about_content = Label(
-        markup=True,
+    about_content = Label(markup=True,
         text=f'Pesto {__version__}\n\n\n[b]Git:[/b] https://github.com/devgio/pesto')
     popup = Popup(title='About',
                 content=about_content,
@@ -90,7 +90,6 @@ def show_about(self):
                 pos_hint={'x': 0.3, 'y':0.3},
             ).open()
 
-# Create GUI
 class MainPage(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -104,7 +103,6 @@ class MainPage(GridLayout):
             self.add_widget(kc.text_input)
             self.add_widget(kc.intro)
             self.add_widget(kc.switch)
-        # self.add_widget(Label(text=f'[size={small_text_size}]V: {__version__}[/size]', markup=True))
         self.add_widget(Label())
         self.add_widget(Label())
         self.add_widget(Label())
@@ -114,13 +112,11 @@ class MainPage(GridLayout):
                                 background_color=(0, 0, 0, 1)))
 
 
-
 class PestoApp(App):
     def open_settings(self, *largs):
         pass
 
     def build(self):
-        #self.icon = os.path.join(dir_path, 'basil.ico')
         return MainPage()
 
 
