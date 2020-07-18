@@ -1,10 +1,10 @@
 __version__ = '1.0'
 
 # Supress the stdout
-import sys, io
-std_out = io.StringIO()
-sys.stdout = std_out
-sys.stderr = std_out
+# import sys, io
+# std_out = io.StringIO()
+# sys.stdout = std_out
+# sys.stderr = std_out
 
 import pkg_resources.py2_warn # this is for pyinstaller
 import atexit
@@ -18,6 +18,8 @@ from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from kivy.uix.switch import Switch
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from pynput.keyboard import Controller, Listener, Key
 
@@ -78,6 +80,16 @@ if os.path.isfile(text_save_file):
         os.remove(text_save_file)
 
 
+def show_about(self):
+    about_content = Label(
+        markup=True,
+        text=f'Pesto {__version__}\n\n\n[b]Git:[/b] https://github.com/devgio/pesto')
+    popup = Popup(title='About',
+                content=about_content,
+                size_hint=(0.4, 0.3),
+                pos_hint={'x': 0.3, 'y':0.3},
+            ).open()
+
 # Create GUI
 class MainPage(GridLayout):
     def __init__(self, **kwargs):
@@ -92,7 +104,16 @@ class MainPage(GridLayout):
             self.add_widget(kc.text_input)
             self.add_widget(kc.intro)
             self.add_widget(kc.switch)
-        self.add_widget(Label(text=f'[size={small_text_size}]V: {__version__}[/size]', markup=True))
+        # self.add_widget(Label(text=f'[size={small_text_size}]V: {__version__}[/size]', markup=True))
+        self.add_widget(Label())
+        self.add_widget(Label())
+        self.add_widget(Label())
+        self.add_widget(Button(text='About', 
+                                font_size=small_text_size, 
+                                on_press=show_about,
+                                background_color=(0, 0, 0, 1)))
+
+
 
 class PestoApp(App):
     def open_settings(self, *largs):
