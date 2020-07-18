@@ -9,8 +9,10 @@ sys.stderr = std_out
 import pkg_resources.py2_warn # this is for pyinstaller
 import atexit
 import os
+dir_path = os.path.dirname(os.path.realpath(__file__))
 from kivy.config import Config
 Config.set('graphics', 'resizable', False)
+Config.set('kivy','window_icon',os.path.join(dir_path, 'basil.ico'))
 from kivy.app import App
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
@@ -19,7 +21,6 @@ from kivy.uix.switch import Switch
 from kivy.core.window import Window
 from pynput.keyboard import Controller, Listener, Key
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
 home_dir = os.path.expanduser("~")
 
 # Sizes for GUI
@@ -91,14 +92,14 @@ class MainPage(GridLayout):
             self.add_widget(kc.text_input)
             self.add_widget(kc.intro)
             self.add_widget(kc.switch)
-        self.add_widget(Label(text=f'[size={small_text_size}]Version: {__version__}[/size]', markup=True))
+        self.add_widget(Label(text=f'[size={small_text_size}]V: {__version__}[/size]', markup=True))
 
 class PestoApp(App):
     def open_settings(self, *largs):
         pass
 
     def build(self):
-        self.icon = os.path.join(dir_path, 'duck.ico')
+        #self.icon = os.path.join(dir_path, 'basil.ico')
         return MainPage()
 
 
