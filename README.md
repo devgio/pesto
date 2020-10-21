@@ -1,6 +1,6 @@
 # pesto
 
-A simple way to map text to F keys.
+A simple way to map F-keys to text.
 
 ![screenshot](https://github.com/devgio/pesto/blob/master/sc.PNG)
 
